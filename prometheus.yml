@@ -1,8 +1,4 @@
-global:
-  scrape_interval: 15s
-
 scrape_configs:
-  - job_name: 'inventory_app'
-    metrics_path: '/metrics'
+  - job_name: 'inventory-app'
     static_configs:
       - targets: ['app:5000']

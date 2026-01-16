@@ -2,3 +2,6 @@ flask
 supabase
 python-dotenv
 requests
+selenium
+webdriver-manager
+pytest
