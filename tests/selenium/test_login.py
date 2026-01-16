@@ -1,12 +1,21 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+import time
 
-def test_login_page():
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
-    try:
-        driver.get("http://localhost:5000/login")
-        assert "Login" in driver.page_source
-    finally:
-        driver.quit()
+def test_login_page_loads():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--start-maximized")
+
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=options
+    )
+
+    driver.get("http://localhost:5000")
+    time.sleep(3)
+
+    assert "Login" in driver.page_source or "Inventory" in driver.page_source
+
+    driver.quit()

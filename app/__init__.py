@@ -3,6 +3,9 @@ from supabase import create_client, Client
 import os
 from dotenv import load_dotenv
 
+# 🔹 ADD THIS IMPORT
+from prometheus_flask_exporter import PrometheusMetrics
+
 load_dotenv()
 
 # Global Supabase Client
@@ -11,6 +14,14 @@ supabase: Client = None
 def create_app():
     app = Flask(__name__)
     app.secret_key = os.getenv("SECRET_KEY", "dev_secret_key")
+    
+    # 🔹 PROMETHEUS METRICS (AUTO /metrics)
+    metrics = PrometheusMetrics(app)
+    metrics.info(
+        'app_info',
+        'Inventory Management System',
+        version=os.getenv("APP_VERSION", "1.0.0")
+    )
     
     # Initialize Supabase
     global supabase
@@ -23,7 +34,6 @@ def create_app():
         print("Warning: Supabase credentials not found in env.")
 
     # Import and Register Blueprints
-    # Imported here to avoid circular dependencies with 'supabase' client
     from .routes.auth import auth_bp
     from .routes.inventory import inventory_bp
     from .routes.devops import devops_bp
